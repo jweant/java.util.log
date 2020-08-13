@@ -4,3 +4,9 @@
 # Ignore Gradle build output directory
 build
 bin
+log/MyLoggerjavaLog.App.html
+log/MyLoggerjavaLog.App.txt
+log/MyLogging.html
+log/MyLogging.txt
+log/MyLogging2.txt
+log/MyLogging2.xml

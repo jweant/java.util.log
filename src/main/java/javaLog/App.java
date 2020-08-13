@@ -3,20 +3,74 @@
  */
 package javaLog;
 
+import java.io.IOException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javaLog.logger.LoggerTextHtml;
+import javaLog.logger.LoggerTextXml;
+import javaLog.logger.NamedLoggerTextHtml;
 
 
 public class App {
+	private final static String logDirectory = new String("log");
+	
 	// Find or create a logger for a named subsystem. If a logger has already been created with the given name it is returned. Otherwise a new logger is created.
 	private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 	// Create a local logger for ConfigBuilder: this is generally how I've seen loggers used....
 	private final static Logger cbLogger = Logger.getLogger(App.class.getName());
 	
     public String getGreeting() {
-        return "Hello world.";
+    	String greeting = new String("Hello world");
+    	cbLogger.info(String.format("Greeting is %s", greeting));
+    	
+    	return greeting;
     }
 
+    public static void setupMyLogs() {
+    	cbLogger.setLevel(Level.FINEST);
+    	LOGGER.setLevel(Level.FINEST);
+    	
+    	
+		try {
+			// Creates a log file called MyLogger.txt and MyLogger.html in the working directory
+			//   Console handler should be suppressed, but it seems to not be
+			LoggerTextHtml.setup(logDirectory);
+			// Creates a log file called MyLogger2.txt and MyLogger2.xml in the working directory
+			//   There is a console handler here
+			LoggerTextXml.setup(logDirectory);
+			// Initialize the local logger
+			NamedLoggerTextHtml.setup(cbLogger.getName(),logDirectory);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+			// throwing logs at the FINER level
+			cbLogger.throwing(App.class.getName(), "main", e1);
+		}	
+    }
+    
     public static void main(String[] args) {
+    	setupMyLogs();
+
+    	// entering logs at FINER level
+		cbLogger.entering(App.class.getName(), "main");
+		
+		LOGGER.severe("SEVERE log");
+		LOGGER.warning("WARNING log");
+		LOGGER.info("INFO log");
+		LOGGER.fine("FINE log");
+		LOGGER.finer("FINER log");
+		LOGGER.finest("FINEST log");
+		
+		cbLogger.severe("SEVERE log");
+		cbLogger.warning("WARNING log");
+		cbLogger.info("INFO log");
+		cbLogger.fine("FINE msg");
+		cbLogger.finer("FINER log");
+		cbLogger.finest("FINEST log");
+		
         System.out.println(new App().getGreeting());
+        
+        // This prints FINER: RETURN in the MyLoggerjavaLog.App
+        cbLogger.exiting(App.class.getName(), "main");
     }
 }
