@@ -1,0 +1,6 @@
+Aug 13, 2020 2:29:10 PM javaLog.AnotherClass doSomething
+FINER: ENTRY
+Aug 13, 2020 2:29:10 PM javaLog.AnotherClass doSomething
+INFO: I'm in this function now...
+Aug 13, 2020 2:29:10 PM javaLog.AnotherClass doSomething
+FINER: RETURN

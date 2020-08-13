@@ -1,0 +1,6 @@
+Aug 13, 2020 2:29:10 PM javaLog.App main
+INFO: Error Log: OMG its an INFO error
+Aug 13, 2020 2:29:10 PM javaLog.App main
+WARNING: Error Log: This is just a warning
+Aug 13, 2020 2:29:10 PM javaLog.App main
+SEVERE: Error Log: OMG its severe!

@@ -22,25 +22,18 @@ public class LoggerTextXml {
     static private FileHandler fileXML;
     static private Formatter formatterXML;
 
-    static private ConsoleHandler consoleTxt;
+   // static private ConsoleHandler consoleTxt;
     
     static public void setup(String directory) throws IOException {
 
         // get the global logger to configure it
         Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
-        // don't suppress the logging output to the console
-        //Logger rootLogger = Logger.getLogger("");
-        //Handler[] handlers = rootLogger.getHandlers();
-        //if (handlers[0] instanceof ConsoleHandler) {
-        //    rootLogger.removeHandler(handlers[0]);
-        //}
-
         logger.setLevel(Level.FINER);
-        fileTxt = new FileHandler(directory + "\\MyLogging2.txt");
-        fileXML = new FileHandler(directory + "\\MyLogging2.xml");
+        fileTxt = new FileHandler(directory + "\\globalLog.txt");
+        fileXML = new FileHandler(directory + "\\globalLog.xml");
 
-        consoleTxt = new ConsoleHandler();
+       // consoleTxt = new ConsoleHandler();
         
         // create a TXT formatter
         formatterTxt = new SimpleFormatter();
@@ -52,7 +45,9 @@ public class LoggerTextXml {
         fileXML.setFormatter(formatterXML);
         logger.addHandler(fileXML);
         
-        consoleTxt.setFormatter(new SimpleFormatter());
-        logger.addHandler(consoleTxt);
+        // I kept this here because if you do this manually you will create 2 msgs
+        //  going out to console
+       // consoleTxt.setFormatter(new SimpleFormatter());
+       // logger.addHandler(consoleTxt);
     }
 }

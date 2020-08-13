@@ -1,0 +1,10 @@
+Aug 13, 2020 2:29:10 PM javaLog.App main
+SEVERE: Global SEVERE log
+Aug 13, 2020 2:29:10 PM javaLog.App main
+WARNING: Global WARNING log
+Aug 13, 2020 2:29:10 PM javaLog.App main
+INFO: Global INFO log
+Aug 13, 2020 2:29:10 PM javaLog.App main
+FINE: Global FINE log
+Aug 13, 2020 2:29:10 PM javaLog.App main
+FINER: Global FINER log

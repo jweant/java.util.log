@@ -25,16 +25,9 @@ public class NamedLoggerTextHtml {
         // get the logger to configure it
         Logger logger = Logger.getLogger(name);
 
-        // suppress the logging output to the console
-       // Logger rootLogger = Logger.getLogger("");
-        //Handler[] handlers = logger.getHandlers();
-       // if (handlers[0] instanceof ConsoleHandler) {
-       // 	logger.removeHandler(handlers[0]);
-       // }
-
         logger.setLevel(Level.FINEST);
-        String formatName1 = String.format("%s\\MyLogger%s.txt", directory, name);
-        String formatName2 = String.format("%s\\MyLogger%s.html", directory, name);
+        String formatName1 = String.format("%s\\%slog.txt", directory, name);
+        String formatName2 = String.format("%s\\%slog.html", directory, name);
         fileTxt = new FileHandler(formatName1);
         fileHTML = new FileHandler(formatName2);
 

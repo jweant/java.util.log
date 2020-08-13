@@ -7,18 +7,19 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javaLog.logger.LoggerTextHtml;
+import javaLog.logger.ErrorLogger;
 import javaLog.logger.LoggerTextXml;
 import javaLog.logger.NamedLoggerTextHtml;
 
 
 public class App {
-	private final static String logDirectory = new String("log");
+	public final static String logDirectory = new String("log");
 	
 	// Find or create a logger for a named subsystem. If a logger has already been created with the given name it is returned. Otherwise a new logger is created.
 	private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 	// Create a local logger for ConfigBuilder: this is generally how I've seen loggers used....
 	private final static Logger cbLogger = Logger.getLogger(App.class.getName());
+	// Create an error handler for errors
 	
     public String getGreeting() {
     	String greeting = new String("Hello world");
@@ -28,46 +29,66 @@ public class App {
     }
 
     public static void setupMyLogs() {
-    	cbLogger.setLevel(Level.FINEST);
-    	LOGGER.setLevel(Level.FINEST);
     	
+    	// Set my local logger to FINEST
+    	cbLogger.setLevel(Level.FINEST);
+    	// Set global to WARN
+    	LOGGER.setLevel(Level.WARNING);
+    	// Set to FINER to print out
+    	ErrorLogger.getLogger().setLevel(Level.FINER);
     	
 		try {
-			// Creates a log file called MyLogger.txt and MyLogger.html in the working directory
-			//   Console handler should be suppressed, but it seems to not be
-			LoggerTextHtml.setup(logDirectory);
-			// Creates a log file called MyLogger2.txt and MyLogger2.xml in the working directory
-			//   There is a console handler here
+			// Creates a log file called globalLog.txt and globalLog.xml in the working directory
+			//   There is a console handler here that prints it out to screen
 			LoggerTextXml.setup(logDirectory);
 			// Initialize the local logger
+			//   Local logger is called 
 			NamedLoggerTextHtml.setup(cbLogger.getName(),logDirectory);
+			// Set up a separate error logger, I've set this up as an example of a self-contained logger...
+			//   this self-contained logger is just set up as a class...
+			//   Name is Error.txt and Error.html
+			//   You can also just log all your errors at level ERROR....
+			ErrorLogger.setup(logDirectory);
+			
 		} catch (IOException e1) {
 			e1.printStackTrace();
 			// throwing logs at the FINER level
 			cbLogger.throwing(App.class.getName(), "main", e1);
+			ErrorLogger.getLogger().throwing(App.class.getName(), "main", e1);
 		}	
+		
+		// MyLoggingT
+		
+		
     }
     
     public static void main(String[] args) {
+    	AnotherClass ac = new AnotherClass();
     	setupMyLogs();
 
     	// entering logs at FINER level
 		cbLogger.entering(App.class.getName(), "main");
 		
-		LOGGER.severe("SEVERE log");
-		LOGGER.warning("WARNING log");
-		LOGGER.info("INFO log");
-		LOGGER.fine("FINE log");
-		LOGGER.finer("FINER log");
-		LOGGER.finest("FINEST log");
+		// Using convenience methods for logging on these loggers
+		LOGGER.severe("Global SEVERE log");
+		LOGGER.warning("Global WARNING log");
+		LOGGER.info("Global INFO log");
+		LOGGER.fine("Global FINE log");
+		LOGGER.finer("Global FINER log");
+		LOGGER.finest("Global FINEST log");
 		
-		cbLogger.severe("SEVERE log");
-		cbLogger.warning("WARNING log");
-		cbLogger.info("INFO log");
-		cbLogger.fine("FINE msg");
-		cbLogger.finer("FINER log");
-		cbLogger.finest("FINEST log");
+		cbLogger.severe("cbLogger SEVERE log");
+		cbLogger.warning("cbLogger WARNING log");
+		cbLogger.info("cbLogger INFO log");
+		cbLogger.fine("cbLogger FINE msg");
+		cbLogger.finer("cbLogger FINER log");
+		cbLogger.finest("cbLogger FINEST log");
 		
+		ErrorLogger.getLogger().info("Error Log: OMG its an INFO error");
+		ErrorLogger.getLogger().warning("Error Log: This is just a warning");
+		ErrorLogger.getLogger().severe("Error Log: OMG its severe!");
+		
+		ac.doSomething();
         System.out.println(new App().getGreeting());
         
         // This prints FINER: RETURN in the MyLoggerjavaLog.App
