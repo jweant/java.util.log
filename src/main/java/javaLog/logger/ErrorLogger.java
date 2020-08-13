@@ -1,14 +1,13 @@
-package javaLog.logger;
+package javalog.logger;
 
 import java.io.IOException;
-import java.util.logging.ConsoleHandler;
 import java.util.logging.FileHandler;
 import java.util.logging.Formatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
-import javaLog.formatters.HtmlFormatter;
+import javalog.formatters.HtmlFormatter;
 
 public class ErrorLogger {
 	
@@ -28,7 +27,8 @@ public class ErrorLogger {
     //static private ConsoleHandler consoleHandler;
     //static private SimpleFormatter consoleFormatterTxt;
     
-    static public void setup(String directory) throws IOException {
+    
+    public static void setup(String directory) throws IOException {
 
         // get the logger to configure it
         Logger logger = Logger.getLogger(name);

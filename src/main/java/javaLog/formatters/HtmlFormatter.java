@@ -1,4 +1,4 @@
-package javaLog.formatters;
+package javalog.formatters;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

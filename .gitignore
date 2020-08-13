@@ -10,3 +10,12 @@ log/MyLogging.html
 log/MyLogging.txt
 log/MyLogging2.txt
 log/MyLogging2.xml
+log/Error.html
+log/Error.html
+log/Error.txt
+log/globalLog.txt
+log/globalLog.xml
+log/javaLog.AnotherClasslog.html
+log/javaLog.AnotherClasslog.txt
+log/javaLog.Applog.html
+log/javaLog.Applog.txt
