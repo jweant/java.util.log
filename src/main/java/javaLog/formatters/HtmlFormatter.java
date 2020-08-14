@@ -12,7 +12,9 @@ public class HtmlFormatter extends Formatter {
 
 	// this method is called for every log records
     public String format(LogRecord rec) {
-        StringBuffer buf = new StringBuffer(1000);
+        //StringBuffer buf = new StringBuffer(1000); // SQ says to replace synchronized class by
+    	//           unsynchronized one for performance
+    	StringBuilder buf = new StringBuilder();
         buf.append("<tr>\n");
 
         // colorize any levels >= WARNING in red
@@ -22,11 +24,12 @@ public class HtmlFormatter extends Formatter {
             buf.append(rec.getLevel());
             buf.append("</b>");
         } else {
-            buf.append("\t<td>");
+        	// SQ wants me to create a constant for \t<td>, I argue that makes it harder to read
+            buf.append("\t<td>"); // NOSONAR
             buf.append(rec.getLevel());
         }
 
-        buf.append("</td>\n");
+        buf.append("</td>\n"); // NOSONAR
         buf.append("\t<td>");
         buf.append(calcDate(rec.getMillis()));
         buf.append("</td>\n");
@@ -38,14 +41,15 @@ public class HtmlFormatter extends Formatter {
         return buf.toString();
     }
 
-    private String calcDate(long millisecs) {
-        SimpleDateFormat date_format = new SimpleDateFormat("MMM dd,yyyy HH:mm");
+    private static String calcDate(long millisecs) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd,yyyy HH:mm");
         Date resultdate = new Date(millisecs);
-        return date_format.format(resultdate);
+        return dateFormat.format(resultdate);
     }
 
     // this method is called just after the handler using this
     // formatter is created
+    @Override
     public String getHead(Handler h) {
         return "<!DOCTYPE html>\n<head>\n<style>\n"
             + "table { width: 100% }\n"
@@ -66,6 +70,7 @@ public class HtmlFormatter extends Formatter {
 
     // this method is called just after the handler using this
     // formatter is closed
+    @Override
     public String getTail(Handler h) {
         return "</table>\n</body>\n</html>";
     }

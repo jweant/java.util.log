@@ -9,11 +9,14 @@ import javalog.logger.NamedLoggerTextHtml;
 
 public class AnotherClass {
 
+	// Local logger, set up to log as defined in NamedLoggerTextHtml.setup
 	private static final Logger log = Logger.getLogger(AnotherClass.class.getName());
-
+	// Global logger; set up via LoggerTextXml.setup (previously)
+	private static final Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+	
 	AnotherClass() {
 		try {
-			NamedLoggerTextHtml.setup(AnotherClass.class.getName(), App.logDirectory);
+			NamedLoggerTextHtml.setup(AnotherClass.class.getName(), App.LOGDIRECTORY);
 		} catch (IOException e) {
 
 			e.printStackTrace();
@@ -26,15 +29,20 @@ public class AnotherClass {
 		ErrorLogger.getLogger().log(Level.INFO, ()-> "I've created " + AnotherClass.class.getName());
 	}
 	
-	public void doSomething() {
+	public int doSomething(int aVariable) {
+		int result = 3; // NOSONAR
 		// I don't know how to get the function name...
-		log.entering(AnotherClass.class.getName(), "doSomething");
+		log.entering(AnotherClass.class.getName(), "doSomething", aVariable);
 		log.info("I'm in this function now...");
 	
+			// I'm using the SonarQube Eclipse plugin and this (the NOSONAR) makes it shut up for this line
 		System.out.println("Doing something..."); // NOSONAR
-	
+		LOGGER.info("Look global logger, I'm in the doSomething class");
+		
 		ErrorLogger.getLogger().log(Level.INFO, ()->"doing Something " + AnotherClass.class.getName());
 		
-		log.exiting(AnotherClass.class.getName(), "doSomething");
+		result++;
+		log.exiting(AnotherClass.class.getName(), "doSomething", result);
+		return result;
 	}
 }

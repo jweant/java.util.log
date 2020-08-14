@@ -13,17 +13,22 @@ import javalog.logger.NamedLoggerTextHtml;
 
 
 public class App {
-	public final static String logDirectory = new String("log");
+	
+	public static final String LOGDIRECTORY = "log";
 	
 	// Find or create a logger for a named subsystem. If a logger has already been created with the given name it is returned. Otherwise a new logger is created.
-	private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+	private static final Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 	// Create a local logger for ConfigBuilder: this is generally how I've seen loggers used....
-	private final static Logger cbLogger = Logger.getLogger(App.class.getName());
+	private static final Logger cbLogger = Logger.getLogger(App.class.getName());
 	// Create an error handler for errors
 	
     public String getGreeting() {
-    	String greeting = new String("Hello world");
-    	cbLogger.info(String.format("Greeting is %s", greeting));
+    	String greeting = "Hello world";
+    	// This is commented out to show that you shouldn't do things this way...
+    	//   SonarQube complained; the compliant solution is below
+    	//   SQ complained since no matter what the level the String.format is called
+    	//cbLogger.info(String.format("Greeting is %s", greeting)); // NOSONAR
+    	cbLogger.log(Level.INFO, () -> "Greeting is: " + greeting);
     	
     	return greeting;
     }
@@ -40,20 +45,20 @@ public class App {
 		try {
 			// Creates a log file called globalLog.txt and globalLog.xml in the working directory
 			//   There is a console handler here that prints it out to screen
-			LoggerTextXml.setup(logDirectory);
+			LoggerTextXml.setup(LOGDIRECTORY);
 			// Initialize the local logger
 			//   Local logger is called 
-			NamedLoggerTextHtml.setup(cbLogger.getName(),logDirectory);
+			NamedLoggerTextHtml.setup(cbLogger.getName(),LOGDIRECTORY);
 			// Set up a separate error logger, I've set this up as an example of a self-contained logger...
 			//   this self-contained logger is just set up as a class...
 			//   Name is Error.txt and Error.html
 			//   You can also just log all your errors at level ERROR....
-			ErrorLogger.setup(logDirectory);
+			ErrorLogger.setup(LOGDIRECTORY);
 			
 		} catch (IOException e1) {
 			e1.printStackTrace();
 			// throwing logs at the FINER level
-			cbLogger.throwing(App.class.getName(), "main", e1);
+			cbLogger.throwing(App.class.getName(),"main", e1);
 			ErrorLogger.getLogger().throwing(App.class.getName(), "main", e1);
 		}	
 		
@@ -88,8 +93,11 @@ public class App {
 		ErrorLogger.getLogger().warning("Error Log: This is just a warning");
 		ErrorLogger.getLogger().severe("Error Log: OMG its severe!");
 		
-		ac.doSomething();
-        System.out.println(new App().getGreeting());
+		// This is example code and doesn't matter, SQ complains about no magic numbers here, 
+		//   so I am ignoring it
+		ac.doSomething(5); // NOSONAR
+		// SQ complains about not using a log here, I'm ignoring that
+        System.out.println(new App().getGreeting()); // NOSONAR
         
         // This prints FINER: RETURN in the MyLoggerjavaLog.App
         cbLogger.exiting(App.class.getName(), "main");
